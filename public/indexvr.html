@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>360 Video in A-Frame</title>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <div>    <button style="z-index: 9999;
+    position: absolute;top: 5px;" id="playbtn" onclick="play()">start</button>
+     <button  style="z-index: 9999;
+    position: absolute;left: 15vw;top: 5px;
+" onclick="nextVideo()">Next Video</button>
+</div>
+
+    <a-scene  vr-mode-ui="enabled: true" device-orientation-permission-ui="enabled: true"
+      cursor="rayOrigin: mouse;fuseTimeout: 0;" raycaster="objects: .clickable" renderer="antialias: true; colorManagement: true;
+                sortObjects: true;   " uiloading="#example-loading-overlay" inspector="" keyboard-shortcuts=""
+      screenshot="">
+      <a-assets>
+        <!-- Your 360° video -->
+        <video
+          id="myVideo"
+          crossorigin="anonymous"
+          autoplay
+          loop
+          playsinline
+          webkit-playsinline=""
+          src="360/demovideo.mp#t=1">
+        
+        </video>
+<img id="my360img" src="360/Untitled-2.jpg">
+ <video controls preload="auto" id="vid2"
+          src="360/snow_render_01.mp4#t=1" autoplay loop="true"
+               crossOrigin="anonymous"></video>
+          <video controls preload="auto" id="vid3"
+          src="360/Forest_Render_1 1.mp4#t=1" autoplay loop="true"
+               crossOrigin="anonymous"></video>
+      </a-assets>
+     <a-camera id="camera"></a-camera>
+      <!-- The 360 video wrapped on a sphere -->
+      <a-sky id="sky1" src="#vid3" rotation="0 0 0"></a-sky>
+
+      <!-- Default camera -->
+   
+    </a-scene>
+
+  
+
+
+    <script>
+
+        function play() {
+      const audio = document.getElementById("vid3");
+      audio.play();  // play audio
+    }
+    const videos = [ "#vid3", "#vid2"];
+      let index = 0;
+
+      function nextVideo() {
+        const sky = document.getElementById("sky1");
+        index = (index + 1) % videos.length; // cycle through
+        sky.setAttribute("src", videos[index]);
+
+        // ensure video plays (mobile browsers require explicit play)
+        const vidEl = document.querySelector(videos[index]);
+        vidEl.play();
+      }
+      // Ensure video plays after user interaction (especially on mobile)
+      const video = document.querySelector("#vid3");
+
+      // Some browsers require a user gesture
+      document.addEventListener("click", () => {
+        if (video.paused) {
+          video.play().catch((err) => console.warn("Video play error:", err));
+        }
+      });
+    </script>
+  </body>
+</html>
