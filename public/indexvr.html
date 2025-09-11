@@ -6,10 +6,14 @@
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   </head>
   <body>
+    <video id="videoplane" width="100%" height="100%" autoplay muted style="position: absolute;z-index: 9;">
+  <source src="360/low.mp4" type="video/mp4">
+</video>
     <div style="position: relative;
-    left: 15px;">    <button style="z-index: 9999; padding: 5px 8px;font-size: 1.01rem;    position: absolute;top: 5px;" id="playbtn" onclick="play()">start</button>
-     <button  style="z-index: 9999; padding: 5px 8px;font-size: 1rem;  position: absolute;left: 17vw;top: 5px;
-" onclick="nextVideo()">Next Video</button>
+    left: 15px;">   
+     <button style="z-index: 99; padding: 5px 8px;font-size: 1.01rem;    position: absolute;top: 5px;" id="playbtn" onclick="play()"> 360 view start</button>
+     <!-- <button  style="z-index: 99; padding: 5px 8px;font-size: 1rem;  position: absolute;left: 17vw;top: 5px;
+" onclick="nextVideo()">Next Video</button> -->
 </div>
 
     <a-scene  vr-mode-ui="enabled: true" device-orientation-permission-ui="enabled: true"
@@ -25,20 +29,22 @@
           loop
           playsinline
           webkit-playsinline=""
-          src="360/demovideo.mp#t=1">
+          src="360/0001-0450.mp4#t=1">
         
         </video>
 <img id="my360img" src="360/Untitled-2.jpg">
  <video controls preload="auto" id="vid2"
-          src="360/snow_render_01.mp4#t=1" autoplay loop="true"
+          src="360/0001-0450.mp4#t=1" autoplay loop="true"
                crossOrigin="anonymous"></video>
           <video controls preload="auto" id="vid3"
-          src="360/Forest_Render_1 1.mp4#t=1" autoplay loop="true"
+          src="360/updated_CAM_01.0450.mp4#t=1" autoplay loop="true"
                crossOrigin="anonymous"></video>
       </a-assets>
      <a-camera id="camera"></a-camera>
+
+   
       <!-- The 360 video wrapped on a sphere -->
-      <a-sky id="sky1" src="#vid3" rotation="0 0 0"></a-sky>
+      <a-sky id="sky1" src="#vid3" rotation="0 -90 0" visible="false"></a-sky>
 
       <!-- Default camera -->
    
@@ -48,32 +54,24 @@
 
 
     <script>
+function play() {
+  const audio = document.getElementById("vid3");
+  const videoplane = document.getElementById("videoplane");
+  const sky1 = document.getElementById("sky1");
 
-        function play() {
-      const audio = document.getElementById("vid3");
-      audio.play();  // play audio
-    }
-    const videos = [ "#vid3", "#vid2"];
-      let index = 0;
+  // Hide videoplane
+  videoplane.style.display = "none";
 
-      function nextVideo() {
-        const sky = document.getElementById("sky1");
-        index = (index + 1) % videos.length; // cycle through
-        sky.setAttribute("src", videos[index]);
+  // Show sky1 (if it's an A-Frame entity)
+  sky1.setAttribute("visible", true);
 
-        // ensure video plays (mobile browsers require explicit play)
-        const vidEl = document.querySelector(videos[index]);
-        vidEl.play();
-      }
-      // Ensure video plays after user interaction (especially on mobile)
-      const video = document.querySelector("#vid3");
+  // Play audio
+  audio.play().catch(err => {
+    console.error("Audio play failed:", err);
+  });
+}
 
-      // Some browsers require a user gesture
-      document.addEventListener("click", () => {
-        if (video.paused) {
-          video.play().catch((err) => console.warn("Video play error:", err));
-        }
-      });
+      
     </script>
   </body>
 </html>
